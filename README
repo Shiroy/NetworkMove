@@ -1,3 +1,11 @@
 NetworkMove est un petit projet de MMORPG éducatif montrant comment on 
 peut créer un jeu en ligne en deux dimension, basé sur une architecture 
 client/serveur.
+
+-Les dépendances:
+
+Pour compiler NetworkMove vous devez utiliser les bibliothèques:
+La SFML http://www.sfml-dev.org (gère l'affichage, le réseau et les 
+threads)
+SFGUI http://sfgui.sfml-dev.de (gère la GUI du client)
+
