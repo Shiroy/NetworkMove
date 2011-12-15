@@ -1,0 +1,118 @@
+#include <App/App.h>
+#include <Network/Opcode.h>
+#include <memory>
+#include <iostream>
+
+App::App()
+{
+    //ctor
+}
+
+App::~App()
+{
+    //dtor
+}
+
+void App::Init()
+{
+    run = true;
+
+    m_window.Create(sf::VideoMode(800, 600), "Network Move", sf::Style::Close | sf::Style::Titlebar);
+    m_window.SetFramerateLimit(60);
+
+    m_login.CreateGui();
+    sfg::Widget::Ptr result = sGuiManager->GetWidget("LOGIN_LOGIN_CONNECT_BUTTON");
+
+    sfg::Button::Ptr connect = sfg::DynamicPointerCast<sfg::Button>(result);
+    if(connect)
+    {
+        connect->OnClick.Connect(&App::ConnectHandler, this);
+    }
+
+    sfg::Button::Ptr cancel = sfg::DynamicPointerCast<sfg::Button>(sGuiManager->GetWidget("LOGIN_STATUS_CANCEL_BUTTON"));
+    if(cancel)
+    {
+        cancel->OnClick.Connect(&App::CancelClicked, this);
+    }
+
+    sGuiManager->SetTopLevelWidget("LOGIN_LOGIN_MAIN_BOX");
+}
+
+void App::Run()
+{
+    while(run)
+    {
+        uint32 uiDiff = m_clock.GetElapsedTime();
+        m_mainSocket.Update(uiDiff);
+        Update(uiDiff);
+        m_clock.Reset();
+
+        sf::Event event;
+        while(m_window.PollEvent(event))
+        {
+            if(event.Type == sf::Event::Closed)
+            {
+                m_window.Close();
+                run = false;
+            }
+
+            sGuiManager->HandleGuiEvent(event);
+        }
+
+        m_window.Clear();
+
+        sGuiManager->RenderGui(m_window);
+
+        m_window.Display();
+    }
+}
+
+void App::Update(uint32 uiDiff)
+{
+
+}
+
+void App::Exit()
+{
+
+}
+
+void App::ConnectHandler()
+{
+    sf::Packet data;
+
+    sfg::Entry::Ptr pseudoBox, passBox;
+    pseudoBox = sfg::DynamicPointerCast<sfg::Entry>(sGuiManager->GetWidget("LOGIN_LOGIN_PSEUDO_ENTRY"));
+    passBox = sfg::DynamicPointerCast<sfg::Entry>(sGuiManager->GetWidget("LOGIN_LOGIN_PASS_ENTRY"));
+
+    m_login.SetStatutMessage("Connexion en cours");
+
+    if(pseudoBox && passBox)
+    {
+        std::string pseudo, password;
+        pseudo = pseudoBox->GetText();
+        password = passBox->GetText();
+        data << uint16(CMSG_AUTH_TRY);
+        data << std::string("0.0.1a");
+        data << pseudo;
+        data << password;
+
+        if(!m_mainSocket.ConnectTo(sf::IpAddress("127.0.0.1")))
+        {
+            m_login.SetStatutMessage("Impossible de se connecter. Veuillez rééssayer plus tard.");
+        }
+
+        m_mainSocket.SendPacket(data);
+    }
+}
+
+void App::CancelClicked()
+{
+    sfg::Window::Ptr statusWindow = sfg::DynamicPointerCast<sfg::Window>(sGuiManager->GetWidget("LOGIN_STATUS_DIALOG_WINDOW"));
+    if(statusWindow)
+    {
+        statusWindow->Show(false);
+    }
+
+    m_mainSocket.Close();
+}
