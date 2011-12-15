@@ -48,6 +48,20 @@ void WorldSession::Update(const uint32 uiDiff)
             m_socket->Disconnect();
         }
     }
+
+    m_sendMutex.Lock();
+    if(!m_sendQueuePacket.empty())
+    {
+        data = m_sendQueuePacket.front();
+        m_sendQueuePacket.pop();
+    }
+    m_sendMutex.Unlock();
+
+    if(data.GetDataSize() != 0)
+    {
+        std::cout << "Envoie de donné" << std::endl;
+        m_socket->Send(data);
+    }
 }
 
 void WorldSession::SetStatus(uint8 nStatus)
@@ -62,7 +76,9 @@ uint8 WorldSession::GetStatus()
 
 void WorldSession::SendPacket(sf::Packet &pkt)
 {
-    m_queuedPacket.push(pkt);
+    m_sendMutex.Lock();
+    m_sendQueuePacket.push(pkt);
+    m_sendMutex.Unlock();
 }
 
 void WorldSession::HandleAuthTry(sf::Packet &data)
@@ -74,6 +90,11 @@ void WorldSession::HandleAuthTry(sf::Packet &data)
 
     std::cout << "Pseudo : " << pseudo << std::endl;
     std::cout << "Password : " << password << std::endl;
+
+    sf::Packet resp;
+    resp << uint16(SMSG_AUTH_TRY);
+    resp << uint8(0); //Code d'erreur
+    SendPacket(resp);
 }
 
 void WorldSession::NetworkThread()
@@ -83,17 +104,18 @@ void WorldSession::NetworkThread()
         sf::Packet data;
         if(m_socket->Receive(data) == sf::Socket::Disconnected)
         {
+            //Deconnexion d'un client
             std::cout << "Deconnexion de " << m_socket->GetRemoteAddress() << std::endl;
             m_toDestroy = true;
             return;
         }
         else
         {
+            //Reception de donnés
             std::cout << "Reception de donné" << std::endl;
             m_recvMutex.Lock();
             m_queuedPacket.push(data);
             m_recvMutex.Unlock();
         }
-
     }
 }

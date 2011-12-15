@@ -38,6 +38,7 @@ class WorldSession
 
     sf::TcpSocket *m_socket;
     std::queue<sf::Packet> m_queuedPacket;
+    std::queue<sf::Packet> m_sendQueuePacket;
 
     sf::Thread *m_thread;
     sf::Mutex m_recvMutex;

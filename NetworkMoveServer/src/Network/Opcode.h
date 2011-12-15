@@ -13,6 +13,7 @@ namespace sf
 
 enum Status
 {
+    STATUS_NEVER, //Pour les opcode du type SMSG
     STATUS_AUTHENTIFICATION,
     STATUS_CHARACTER_SELECTION,
     STATUS_INGAME,
@@ -28,8 +29,9 @@ struct OpcodeHandler
 
 enum Opcode
 {
-    MSG_NULL = 0x00,
-    CMSG_AUTH_TRY = 0x01,
+    MSG_NULL = 0x0000,
+    CMSG_AUTH_TRY = 0x0001,
+    SMSG_AUTH_TRY = 0x0002,
     MSG_LAST_OPCODE,
 };
 
