@@ -116,3 +116,9 @@ void App::CancelClicked()
 
     m_mainSocket.Close();
 }
+
+void App::AuthResponseReceived(uint8 resp)
+{
+    m_login.SetStatutMessage("Reponse du serveur :)");
+}
+

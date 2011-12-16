@@ -23,6 +23,21 @@ class WorldSocket
 
     void SendPacket(sf::Packet &pkt);
 
+    void SetStatut(uint8 nStatut)
+    {
+        m_statut = nStatut;
+    }
+
+    uint8 GetStatut()
+    {
+        return m_statut;
+    }
+
+    //Handler
+
+    void NullHandler(sf::Packet &) {}
+    void HandleAuthResponse(sf::Packet &);
+
     private:
 
     void NetworkThread(); //Gère la reception de données par la socket (l'envoir est géré dans WorldSocket::Update)
@@ -38,6 +53,8 @@ class WorldSocket
     std::queue<sf::Packet> m_sendQueuePacket; //Pour l'envoie
 
     App *m_appInstance;
+
+    uint8 m_statut;
 };
 
 #endif // WORLDSOCKET_H

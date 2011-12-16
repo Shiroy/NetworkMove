@@ -10,14 +10,6 @@
 #include <Gui/GuiManager.h>
 #include <Gui/LoginScreen.h>
 
-enum Statut
-{
-    STATUT_NEVER,
-    LOGIN_SCREEN,
-    CHARACTER_SELECTION,
-    INGAME
-};
-
 class App
 {
     public:
@@ -43,6 +35,7 @@ class App
     ********************************/
 
     //
+    void AuthResponseReceived(uint8 resp);
 
     private:
 
