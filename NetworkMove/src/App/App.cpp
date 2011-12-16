@@ -3,7 +3,7 @@
 #include <memory>
 #include <iostream>
 
-App::App()
+App::App() : m_mainSocket(this)
 {
     //ctor
 }

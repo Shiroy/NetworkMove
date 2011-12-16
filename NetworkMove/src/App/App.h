@@ -12,6 +12,7 @@
 
 enum Statut
 {
+    STATUT_NEVER,
     LOGIN_SCREEN,
     CHARACTER_SELECTION,
     INGAME
@@ -37,7 +38,12 @@ class App
     void ConnectHandler();
     void CancelClicked();
 
-    protected:
+    /********************************
+    *Gestion des messages du serveur*
+    ********************************/
+
+    //
+
     private:
 
     sf::RenderWindow m_window;

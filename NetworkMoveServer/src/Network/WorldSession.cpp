@@ -17,6 +17,12 @@ WorldSession::WorldSession(sf::TcpSocket *socket)
 WorldSession::~WorldSession()
 {
     delete m_socket;
+    if(m_thread)
+    {
+        m_thread->Terminate();
+        delete m_thread;
+        m_thread = NULL;
+    }
 }
 
 void WorldSession::Update(const uint32 uiDiff)
