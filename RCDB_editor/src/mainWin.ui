@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainWin</class>
+ <widget class="QMainWindow" name="mainWin">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFichier">
+    <property name="title">
+     <string>Fichier</string>
+    </property>
+    <addaction name="open"/>
+    <addaction name="save"/>
+    <addaction name="saveAs"/>
+    <addaction name="separator"/>
+    <addaction name="quit"/>
+   </widget>
+   <widget class="QMenu" name="menuBase_de_donn">
+    <property name="title">
+     <string>Base de donné</string>
+    </property>
+    <addaction name="actionSelectionner_le_repertoire_de_travaille"/>
+    <addaction name="actionMettre_jour_les_chemins"/>
+   </widget>
+   <addaction name="menuFichier"/>
+   <addaction name="menuBase_de_donn"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="open">
+   <property name="text">
+    <string>Ouvrir</string>
+   </property>
+  </action>
+  <action name="save">
+   <property name="text">
+    <string>Enregistrer</string>
+   </property>
+  </action>
+  <action name="saveAs">
+   <property name="text">
+    <string>Enregistrer sous</string>
+   </property>
+  </action>
+  <action name="quit">
+   <property name="text">
+    <string>Quitter</string>
+   </property>
+  </action>
+  <action name="actionSelectionner_le_repertoire_de_travaille">
+   <property name="text">
+    <string>Selectionner le repertoire de travaille</string>
+   </property>
+  </action>
+  <action name="actionMettre_jour_les_chemins">
+   <property name="text">
+    <string>Mettre à jour les chemins</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

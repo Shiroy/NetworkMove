@@ -3,3 +3,4 @@ project(NetworkMove)
 
 add_subdirectory(NetworkMove)
 add_subdirectory(NetworkMoveServer)
+add_subdirectory(RCDB_editor)
