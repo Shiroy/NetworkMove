@@ -3,8 +3,8 @@ include_directories(src)
 find_package(Qt4 REQUIRED)
 
 file(GLOB_RECURSE source_files src/*.cpp src/*.h)
-set(MOC_FILES src/mainWin.h)
-set(uic_file src/mainWin.ui)
+set(MOC_FILES src/mainWin.h src/editDialog.h)
+set(uic_file src/mainWin.ui src/editDialog.ui)
 set(EXECUTABLE_OUTPUT_PATH ../bin)
 
 QT4_WRAP_CPP(QT_MOC_FILE_LIST ${MOC_FILES})
