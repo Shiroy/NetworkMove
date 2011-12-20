@@ -1,6 +1,8 @@
 #include "mainWin.h"
 #include "editDialog.h"
 
+#include <QFileDialog>
+
 mainWin::mainWin() : QMainWindow()
 {
     setupUi(this);
@@ -22,6 +24,12 @@ mainWin::~mainWin()
 
 void mainWin::newRessource()
 {
-    EditDialog dialog(this, QDir::rootPath(), 1, "Essai");
+    EditDialog dialog(this, m_workingDir);
     dialog.exec();
+}
+
+void mainWin::on_changeWorkingDir_triggered()
+{
+    QString newDir = QFileDialog::getExistingDirectory(this, tr("Sélectionnez un repertoire de travail"));
+    m_workingDir.setPath(newDir);
 }

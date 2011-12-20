@@ -49,7 +49,7 @@
     </property>
     <addaction name="newRc"/>
     <addaction name="separator"/>
-    <addaction name="actionSelectionner_le_repertoire_de_travaille"/>
+    <addaction name="changeWorkingDir"/>
     <addaction name="actionMettre_jour_les_chemins"/>
    </widget>
    <addaction name="menuFichier"/>
@@ -76,7 +76,7 @@
     <string>Quitter</string>
    </property>
   </action>
-  <action name="actionSelectionner_le_repertoire_de_travaille">
+  <action name="changeWorkingDir">
    <property name="text">
     <string>Selectionner le repertoire de travaille</string>
    </property>
