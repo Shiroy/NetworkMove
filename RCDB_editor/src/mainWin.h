@@ -21,11 +21,14 @@ class mainWin : public QMainWindow, private Ui::mainWin
 
     void newRessource();
     void on_changeWorkingDir_triggered();
+    void addRessource(int type, QString filename);
+    void editRessource(QModelIndex index);
 
     private:
 
     QStandardItemModel *m_model;
     QDir m_workingDir;
+    int m_lastId;
 };
 
 #endif
