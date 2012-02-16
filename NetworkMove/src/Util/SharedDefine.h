@@ -11,6 +11,13 @@ typedef int int32;
 typedef short int16;
 typedef char int8;
 
+enum AUTH_RESPONSE
+{
+    AUTH_OK = 0x00,
+    AUTH_WRONG_PASSWORD = 0x01,
+    AUTH_BANNED = 0x02,
+};
+
 #undef NULL
 #define NULL 0
 

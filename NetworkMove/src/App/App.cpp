@@ -119,6 +119,19 @@ void App::CancelClicked()
 
 void App::AuthResponseReceived(uint8 resp)
 {
-    m_login.SetStatutMessage("Reponse du serveur :)");
+    switch(resp)
+    {
+        case AUTH_OK:
+        m_login.SetStatutMessage("Authentifié.");
+        break;
+
+        case AUTH_WRONG_PASSWORD:
+        m_login.SetStatutMessage("Mauvais mot de passe.");
+        break;
+
+        case AUTH_BANNED:
+        m_login.SetStatutMessage("Vôtre compte a été bannis.");
+        break;
+    }
 }
 
