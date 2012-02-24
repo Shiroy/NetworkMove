@@ -2,7 +2,7 @@
 
 OpcodeHandler opcodeMap[MSG_LAST_OPCODE];
 
-void RegisterOpcode(int16 opcodeNumber, uint8 status, const char* n_opcodeName, void (WorldSession::*hdl)(sf::Packet&))
+void RegisterOpcode(Opcode opcodeNumber, const char* n_opcodeName, Statut status, void (WorldSession::*hdl)(sf::Packet&))
 {
     OpcodeHandler newOpcode;
 

@@ -1,3 +1,8 @@
+/*!
+*\file main.cpp
+*\brief Fichier contenant la fonction main
+*/
+
 #include <iostream>
 #include <Unit/Unit.h>
 #include <Network/WorldSocket.h>

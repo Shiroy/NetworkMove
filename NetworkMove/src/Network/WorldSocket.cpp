@@ -6,7 +6,7 @@
 
 OpcodeHandler opcodeMap[MSG_LAST_OPCODE];
 
-void RegisterOpcode(uint16 opcode, const char* opName, uint8 status, void (WorldSocket::*handler)(sf::Packet&))
+void RegisterOpcode(uint16 opcode, const char* opName, Statut status, void (WorldSocket::*handler)(sf::Packet&))
 {
     OpcodeHandler newOp;
     newOp.opcode = opcode;
