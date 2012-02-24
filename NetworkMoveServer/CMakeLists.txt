@@ -1,5 +1,9 @@
 include_directories(src)
 
+if(DEBUG)
+    add_definitions(-g)
+endif()
+
 file(GLOB_RECURSE source_files src/*.cpp src/*.h)
 set(EXECUTABLE_OUTPUT_PATH ../bin)
 

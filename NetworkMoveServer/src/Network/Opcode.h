@@ -6,7 +6,7 @@
 #include <Util/SharedDefine.h>
 #include <Network/WorldSession.h>
 
-namespace sf
+namespace sf //Name space de la SFML
 {
     class Packet;
 };
