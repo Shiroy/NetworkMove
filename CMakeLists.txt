@@ -5,3 +5,4 @@ option(DEBUG "Compiler avec les informations de debogage" 0)
 
 add_subdirectory(NetworkMove)
 add_subdirectory(NetworkMoveServer)
+add_subdirectory(shared_lib)

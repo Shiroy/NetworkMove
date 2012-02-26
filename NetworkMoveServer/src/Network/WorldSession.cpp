@@ -1,5 +1,5 @@
-#include <Network/WorldSession.h>
-#include <Network/Opcode.h>
+#include "Network/WorldSession.h"
+#include "Network/Opcode.h"
 #include <cstring>
 #include <iostream>
 #include <cassert>
@@ -16,7 +16,12 @@ WorldSession::WorldSession(sf::TcpSocket *socket)
 
 WorldSession::~WorldSession()
 {
-    delete m_socket;
+    if(m_socket)
+    {
+        m_socket->Disconnect();
+        delete m_socket;
+    }
+
     if(m_thread)
     {
         m_thread->Terminate();
@@ -42,7 +47,7 @@ void WorldSession::Update(const uint32 uiDiff)
         uint16 opcode;
         data >> opcode;
         OpcodeHandler op = opcodeMap[opcode];
-        std::cout << "Reception de l'opcode " << op.opcode << " (" << op.opcodeName << ")" << std::endl;
+        sLogMgr->Debug("Reception de l'opcode 0x%X (%s)", op.opcode, op.opcodeName);
 
         if(op.status == m_status)
         {
@@ -50,7 +55,7 @@ void WorldSession::Update(const uint32 uiDiff)
         }
         else
         {
-            std::cout << "Reception d'un opcode invalide à cette phase de jeu. Kick !" << std::endl;
+            sLogMgr->Message("Reception d'un opcode invalide à cette phase de jeu : 0x%X (%s). Kick !", op.opcode, op.opcodeName);
             m_socket->Disconnect();
         }
     }
@@ -65,7 +70,7 @@ void WorldSession::Update(const uint32 uiDiff)
 
     if(data.GetDataSize() != 0)
     {
-        std::cout << "Envoie de donné" << std::endl;
+        sLogMgr->Debug("Envoie de donné");
         m_socket->Send(data);
     }
 }
@@ -94,8 +99,8 @@ void WorldSession::HandleAuthTry(sf::Packet &data)
     data >> pseudo;
     data >> password;
 
-    std::cout << "Pseudo : " << pseudo << std::endl;
-    std::cout << "Password : " << password << std::endl;
+    sLogMgr->Debug("Pseudo : %s", pseudo.c_str());
+    sLogMgr->Debug("Password : %s", password.c_str());
 
     sf::Packet resp;
     resp << uint16(SMSG_AUTH_TRY);
@@ -111,14 +116,14 @@ void WorldSession::NetworkThread()
         if(m_socket->Receive(data) == sf::Socket::Disconnected)
         {
             //Deconnexion d'un client
-            std::cout << "Deconnexion de " << m_socket->GetRemoteAddress() << std::endl;
+            sLogMgr->Message("Deconnexion de %s", m_socket->GetRemoteAddress().ToString().c_str());
             m_toDestroy = true;
             return;
         }
         else
         {
             //Reception de donnés
-            std::cout << "Reception de donné" << std::endl;
+            sLogMgr->Debug("Reception de donné");
             m_recvMutex.Lock();
             m_queuedPacket.push(data);
             m_recvMutex.Unlock();

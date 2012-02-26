@@ -1,8 +1,8 @@
-#include <Network/WorldSocket.h>
-#include <App/App.h>
-#include <Network/Opcode.h>
+#include "Network/WorldSocket.h"
+#include "App/App.h"
+#include "Network/Opcode.h"
 #include <cassert>
-#include <iostream>
+#include "Log/Log.h"
 
 OpcodeHandler opcodeMap[MSG_LAST_OPCODE];
 
@@ -75,7 +75,7 @@ void WorldSocket::Update(uint32 uiDiff)
 
         if(opHandler.status != m_statut)
         {
-            std::cout << "Reception d'un opcode non autoriser" << std::endl;
+            sLogMgr->Message("Réception d'un opcode invalide");
             return;
         }
 
@@ -129,7 +129,7 @@ void WorldSocket::NetworkThread()
         m_receiveMutex.Lock();
         m_queuedPacket.push(data);
         m_receiveMutex.Unlock();
-        std::cout << "Reponse du serveur !" << std::endl;
+        sLogMgr->Message("Reponse du serveur !");
     }
 }
 
@@ -152,8 +152,10 @@ void WorldSocket::Close()
 
 void WorldSocket::HandleAuthResponse(sf::Packet &data)
 {
-    uint32 resp;
+    uint8 resp;
     data >> resp;
+
+    sLogMgr->Debug("Code d'authetification %u", resp);
 
     assert(m_appInstance);
     m_appInstance->AuthResponseReceived(resp);

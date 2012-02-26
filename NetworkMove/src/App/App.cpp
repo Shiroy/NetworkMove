@@ -1,5 +1,5 @@
-#include <App/App.h>
-#include <Network/Opcode.h>
+#include "App/App.h"
+#include "Network/Opcode.h"
 #include <memory>
 #include <iostream>
 
@@ -42,10 +42,10 @@ void App::Run()
 {
     while(run)
     {
-        uint32 uiDiff = m_clock.GetElapsedTime();
+        uint32 uiDiff = m_clock.GetElapsedTime().AsMilliseconds();
         m_mainSocket.Update(uiDiff);
         Update(uiDiff);
-        m_clock.Reset();
+        m_clock.Restart();
 
         sf::Event event;
         while(m_window.PollEvent(event))

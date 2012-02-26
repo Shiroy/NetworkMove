@@ -1,7 +1,7 @@
 #ifndef WORLDSOCKETMGR_H
 #define WORLDSOCKETMGR_H
 
-#include "Util/Singleton.h"
+#include "Singleton/Singleton.h"
 #include "Opcode.h"
 #include <SFML/Network.hpp>
 

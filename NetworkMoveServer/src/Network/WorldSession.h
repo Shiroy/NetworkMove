@@ -5,6 +5,7 @@
 #include <Util/SharedDefine.h>
 #include <SFML/System.hpp>
 #include <queue>
+#include "Log/Log.h"
 
 class WorldSession
 {

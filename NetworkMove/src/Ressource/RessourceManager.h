@@ -1,7 +1,7 @@
 #ifndef RESSOURCE_MGR_H
 #define RESSOURCE_MGR_H
 
-#include <Util/Singleton.h>
+#include <Singleton/Singleton.h>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 

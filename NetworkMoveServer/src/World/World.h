@@ -2,9 +2,10 @@
 #define WORLD_H
 
 #include <vector>
-#include <Util/Singleton.h>
-#include <Network/WorldSession.h>
-#include <Network/WorldSocketMgr.h>
+#include <SFML/System.hpp>
+#include "Singleton/Singleton.h"
+#include "Network/WorldSession.h"
+#include "Network/WorldSocketMgr.h"
 
 class World //NE JAMAIS INSTANCIÉ CETTE CLASSE DIRECTEMENT !!! TOUJOURS PASSÉ PAR LE SINGLETON sWorld
 {

@@ -20,6 +20,7 @@ void WorldSocketMgr::StartNetwork()
     if(listener.Listen(3241) != sf::Socket::Done)
         exit(1);
     listener.SetBlocking(false);
+    sLogMgr->Print("Le serveur a été démarré correctement");
 }
 
 void WorldSocketMgr::StopNetwork()
@@ -32,7 +33,7 @@ void WorldSocketMgr::Update(uint32 uiDiff)
     sf::TcpSocket *nSocket = new sf::TcpSocket;
     if(listener.Accept(*nSocket) == sf::Socket::Done) //Gestion des nouvelle connection
     {
-        std::cout << "Nouvelle connection de " << nSocket->GetRemoteAddress() << std::endl;
+        sLogMgr->Message("Nouvelle connection de %s", nSocket->GetRemoteAddress().ToString().c_str());
         IncommingConnection(nSocket);
     }
     else
@@ -45,7 +46,7 @@ void WorldSocketMgr::Update(uint32 uiDiff)
             continue;
         if(session->ToDestroy())
         {
-            std::cout << "Supression d'un WorldSession" << std::endl;
+            sLogMgr->Debug("Supression d'un WorldSession");
             m_sessionMap.erase(i);
         }
 

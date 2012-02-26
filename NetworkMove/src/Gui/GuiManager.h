@@ -3,7 +3,7 @@
 
 #include <map>
 #include <SFGUI/Widget.hpp>
-#include <Util/Singleton.h>
+#include <Singleton/Singleton.h>
 #include <Util/SharedDefine.h>
 #include <SFML/Graphics.hpp>
 
