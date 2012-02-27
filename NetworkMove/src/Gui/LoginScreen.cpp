@@ -13,54 +13,39 @@ LoginScreen::~LoginScreen()
 
 void LoginScreen::CreateGui()
 {
-    pseudoBox = sfg::Entry::Create("Nom d'utilisateur");
-    pseudoBox->SetRequisition(sf::Vector2f(100.0f, .0f));
+    CEGUI::WindowManager &winMgr = CEGUI::WindowManager::getSingleton();
+    CEGUI::Editbox *pseudoBox = static_cast<CEGUI::Editbox*>(winMgr.createWindow("WindowsLook/Editbox", "LOGIN_LOGIN_PSEUDO_EDITBOX"));
+    pseudoBox->setText("Nom d'utilisateur");
+    pseudoBox->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f, 200), CEGUI::UDim(0.0f, 25)));
 
-    passBox = sfg::Entry::Create("Mot de passe");
-    passBox->HideText('*');
-    passBox->SetRequisition(sf::Vector2f(100.0f, .0f));
+    CEGUI::Editbox *passBox = static_cast<CEGUI::Editbox*>(winMgr.createWindow("WindowsLook/Editbox", "LOGIN_LOGIN_PASSWORD_EDITBOX"));
+    passBox->setMaskCodePoint('*');
+    passBox->setTextMasked(true);
+    passBox->setText("Mot de passe");
+    passBox->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f, 200), CEGUI::UDim(0.0f, 25)));
 
-    m_status_window = sfg::Window::Create();
-    m_status_window->SetTitle("Connexion en cours");
+    CEGUI::PushButton *connectButton = static_cast<CEGUI::PushButton*>(winMgr.createWindow("WindowsLook/Button", "LOGIN_LOGIN_CONNECT_BUTTON"));
+    connectButton->setText("Connexion");
+    connectButton->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f, 200), CEGUI::UDim(0.0f, 25)));
 
-    m_status_label = sfg::Label::Create("Connexion au serveur en cours.");
+    CEGUI::Window *bg = winMgr.createWindow("VerticalLayoutContainer", "LOGIN_LOGIN_BACKGROUND_LAYOUT");
+    bg->addChildWindow(pseudoBox);
+    bg->addChildWindow(passBox);
+    bg->addChildWindow(connectButton);
 
-    m_status_window->Show(false);
-    m_status_box = sfg::Box::Create(sfg::Box::VERTICAL);
-    m_status_cancel = sfg::Button::Create("Annuler");
-    m_status_box->Pack(m_status_label);
-    m_status_box->Pack(m_status_cancel);
-    m_status_window->Add(m_status_box);
-
-    connectButton = sfg::Button::Create("Connexion");
-
-    box = sfg::Box::Create(sfg::Box::VERTICAL);
-
-    sGuiManager->AddWidget("LOGIN_LOGIN_PSEUDO_ENTRY", pseudoBox);
-    sGuiManager->AddWidget("LOGIN_LOGIN_PASS_ENTRY", passBox);
-    sGuiManager->AddWidget("LOGIN_LOGIN_CONNECT_BUTTON", connectButton);
-    sGuiManager->AddWidget("LOGIN_LOGIN_MAIN_BOX", box);
-
-    sGuiManager->AddWidget("LOGIN_STATUS_DIALOG_WINDOW", m_status_window);
-    sGuiManager->AddWidget("LOGIN_STATUS_DIALOG_LABEL", m_status_label);
-    sGuiManager->AddWidget("LOGIN_STATUS_CANCEL_BUTTON", m_status_cancel);
-    sGuiManager->AddWidget("LOGIN_STATUS_DIALOG_BOX", m_status_box);
-
-    box->Pack(pseudoBox, true, false);
-    box->Pack(passBox, true, false);
-    box->Pack(connectButton, true, false);
-    box->Pack(m_status_window, true, false);
-    //box->SetPosition(sf::Vector2f(400.0f, 325.0f));
-    box->SetAllocation(sf::FloatRect(300.0f, 300.0f, 200.0f, 200.0f));
+    pseudoBox->setPosition(CEGUI::UVector2(CEGUI::UDim(0.375f, 0), CEGUI::UDim(0.5f, 0)));
+    passBox->setPosition(CEGUI::UVector2(CEGUI::UDim(0.375f, 0), CEGUI::UDim(0.6f, 0)));
+    connectButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.375f, 0), CEGUI::UDim(0.7f, 0)));
+    CEGUI::System::getSingleton().setGUISheet(bg);
 }
 
 void LoginScreen::SetStatutMessage(std::string msg)
 {
-    if(msg.empty())
+    /*if(msg.empty())
         m_status_window->Show(false);
     else
     {
         m_status_window->Show(true);
         m_status_label->SetText(msg);
-    }
+    }*/
 }

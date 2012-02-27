@@ -25,17 +25,6 @@ class LoginScreen
     private:
 
     void ConnectClicked();
-
-    //Widget
-    sfg::Entry::Ptr pseudoBox;
-    sfg::Entry::Ptr passBox;
-    sfg::Button::Ptr connectButton;
-    sfg::Box::Ptr box;
-
-    sfg::Window::Ptr m_status_window;
-    sfg::Label::Ptr m_status_label;
-    sfg::Button::Ptr m_status_cancel;
-    sfg::Box::Ptr m_status_box;
 };
 
 #endif

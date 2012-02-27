@@ -2,7 +2,8 @@
 #define GUIMANAGER_H
 
 #include <map>
-#include <SFGUI/Widget.hpp>
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/OpenGL/CEGUIOpenGLRenderer.h>
 #include <Singleton/Singleton.h>
 #include <Util/SharedDefine.h>
 #include <SFML/Graphics.hpp>
@@ -33,22 +34,22 @@ class GuiManager
     GuiManager(); //NE JAMAIS INSTANCIER CETTE CLASSE DIRECTEMENT !!! TOUJOUS UTILISÉ LE SINGLETON sGuiManager
     ~GuiManager();
 
-    void AddWidget(std::string name, sfg::Widget::Ptr widget);
-    sfg::Widget::Ptr GetWidget(std::string name);
+    bool Initialize(sf::RenderWindow *window);
 
-    bool FindWidget(std::string name);
-
-    void SetTopLevelWidget(std::string name);
-    sfg::Widget::Ptr GetTopLevelWidget() {return m_topLevelWidget;}
-
-    void RenderGui(sf::RenderWindow &window);
+    void RenderGui();
 
     void HandleGuiEvent(sf::Event &event);
 
+    CEGUI::Key::Scan ConvertKeyCode(sf::Keyboard::Key scanCode);
+    CEGUI::MouseButton ConvertMouseButton(sf::Mouse::Button button);
+    void InitConversionTables();
+
     private:
 
-    std::map<std::string, sfg::Widget::Ptr> m_widgetMap;
-    sfg::Widget::Ptr m_topLevelWidget;
+    sf::RenderWindow *m_window;
+
+    std::map<sf::Keyboard::Key, CEGUI::Key::Scan> mKeyMap; //Les code de CEGUI et de la SFML sont différents
+    std::map<sf::Mouse::Button, CEGUI::MouseButton> mMouseButtonMap;
 };
 
 #define sGuiManager Singleton<GuiManager>::GetInstance()

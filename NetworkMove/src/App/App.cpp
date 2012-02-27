@@ -19,9 +19,12 @@ void App::Init()
 
     m_window.Create(sf::VideoMode(800, 600), "Network Move", sf::Style::Close | sf::Style::Titlebar);
     m_window.SetFramerateLimit(60);
+    //m_window.ShowMouseCursor(false);
+
+    sGuiManager->Initialize(&m_window);
 
     m_login.CreateGui();
-    sfg::Widget::Ptr result = sGuiManager->GetWidget("LOGIN_LOGIN_CONNECT_BUTTON");
+    /*sfg::Widget::Ptr result = sGuiManager->GetWidget("LOGIN_LOGIN_CONNECT_BUTTON");
 
     sfg::Button::Ptr connect = sfg::DynamicPointerCast<sfg::Button>(result);
     if(connect)
@@ -35,7 +38,7 @@ void App::Init()
         cancel->OnClick.Connect(&App::CancelClicked, this);
     }
 
-    sGuiManager->SetTopLevelWidget("LOGIN_LOGIN_MAIN_BOX");
+    sGuiManager->SetTopLevelWidget("LOGIN_LOGIN_MAIN_BOX");*/
 }
 
 void App::Run()
@@ -61,7 +64,7 @@ void App::Run()
 
         m_window.Clear();
 
-        sGuiManager->RenderGui(m_window);
+        sGuiManager->RenderGui();
 
         m_window.Display();
     }
@@ -79,7 +82,7 @@ void App::Exit()
 
 void App::ConnectHandler()
 {
-    sf::Packet data;
+    /*sf::Packet data;
 
     sfg::Entry::Ptr pseudoBox, passBox;
     pseudoBox = sfg::DynamicPointerCast<sfg::Entry>(sGuiManager->GetWidget("LOGIN_LOGIN_PSEUDO_ENTRY"));
@@ -103,18 +106,18 @@ void App::ConnectHandler()
         }
 
         m_mainSocket.SendPacket(data);
-    }
+    }*/
 }
 
 void App::CancelClicked()
 {
-    sfg::Window::Ptr statusWindow = sfg::DynamicPointerCast<sfg::Window>(sGuiManager->GetWidget("LOGIN_STATUS_DIALOG_WINDOW"));
+    /*sfg::Window::Ptr statusWindow = sfg::DynamicPointerCast<sfg::Window>(sGuiManager->GetWidget("LOGIN_STATUS_DIALOG_WINDOW"));
     if(statusWindow)
     {
         statusWindow->Show(false);
     }
 
-    m_mainSocket.Close();
+    m_mainSocket.Close();*/
 }
 
 void App::AuthResponseReceived(uint8 resp)
