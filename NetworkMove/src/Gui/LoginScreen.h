@@ -17,9 +17,16 @@ class LoginScreen
     LoginScreen();
     ~LoginScreen();
 
-
+    /*!
+     *\brief Créer la GUI pour afficher l'écran de connexion et la passe en en tant que GUI actuellement à l'écran.
+     *\warn A n'appeler qu'une fois dans le programme !
+     */
     void CreateGui();
 
+    /*!
+     *\brief Affiche le message de status.
+     *\details Affiche le message de status dans la boite de dialogue. Si la boite de dialogue n'est pas affiché elle est affiché. Si le message est vide, la boite de dialogue est cachée.
+     */
     void SetStatutMessage(std::string msg = std::string());
 
     private:
