@@ -1,5 +1,6 @@
-#include <Gui/LoginScreen.h>
-#include <App/App.h>
+#include "Gui/LoginScreen.h"
+#include "App/App.h"
+#include "Log/Log.h"
 
 LoginScreen::LoginScreen()
 {
@@ -17,12 +18,15 @@ void LoginScreen::CreateGui()
     CEGUI::Editbox *pseudoBox = static_cast<CEGUI::Editbox*>(winMgr.createWindow("WindowsLook/Editbox", "LOGIN_LOGIN_PSEUDO_EDITBOX"));
     pseudoBox->setText("Nom d'utilisateur");
     pseudoBox->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f, 200), CEGUI::UDim(0.0f, 25)));
+    pseudoBox->setSelection(0, pseudoBox->getText().size());
+    pseudoBox->subscribeEvent(CEGUI::Window::EventKeyDown, CEGUI::Event::Subscriber(&LoginScreen::on_EventCharacterKey, this));
 
     CEGUI::Editbox *passBox = static_cast<CEGUI::Editbox*>(winMgr.createWindow("WindowsLook/Editbox", "LOGIN_LOGIN_PASSWORD_EDITBOX"));
     passBox->setMaskCodePoint('*');
     passBox->setTextMasked(true);
     passBox->setText("Mot de passe");
     passBox->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f, 200), CEGUI::UDim(0.0f, 25)));
+    passBox->subscribeEvent(CEGUI::Window::EventKeyDown, CEGUI::Event::Subscriber(&LoginScreen::on_EventCharacterKey, this));
 
     CEGUI::PushButton *connectButton = static_cast<CEGUI::PushButton*>(winMgr.createWindow("WindowsLook/Button", "LOGIN_LOGIN_CONNECT_BUTTON"));
     connectButton->setText("Connexion");
@@ -37,6 +41,7 @@ void LoginScreen::CreateGui()
     passBox->setPosition(CEGUI::UVector2(CEGUI::UDim(0.375f, 0), CEGUI::UDim(0.6f, 0)));
     connectButton->setPosition(CEGUI::UVector2(CEGUI::UDim(0.375f, 0), CEGUI::UDim(0.7f, 0)));
     CEGUI::System::getSingleton().setGUISheet(bg);
+    pseudoBox->activate();
 }
 
 void LoginScreen::SetStatutMessage(std::string msg)
@@ -48,4 +53,36 @@ void LoginScreen::SetStatutMessage(std::string msg)
         m_status_window->Show(true);
         m_status_label->SetText(msg);
     }*/
+}
+
+bool LoginScreen::on_EventCharacterKey(CEGUI::EventArgs const &args)
+{
+    CEGUI::KeyEventArgs const &e = static_cast<CEGUI::KeyEventArgs const&>(args);
+    CEGUI::WindowManager &winMgr = ::CEGUI::WindowManager::getSingleton();
+    if(e.window)
+    {
+        if(e.window->getName() == "LOGIN_LOGIN_PSEUDO_EDITBOX" && e.scancode == CEGUI::Key::Tab) //Tabulation ? Passage du focus au champ de mot de passe
+        {
+            CEGUI::Editbox *pass = static_cast<CEGUI::Editbox*>(winMgr.getWindow("LOGIN_LOGIN_PASSWORD_EDITBOX"));
+            if(pass)
+            {
+                pass->setSelection(0, pass->getText().size());
+                pass->activate();
+                return true;
+            }
+        }
+
+        if(e.window->getName() == "LOGIN_LOGIN_PASSWORD_EDITBOX" && e.scancode == CEGUI::Key::Tab) //Tabulation ? Passage du focus au champ de mot de pseudo
+        {
+            CEGUI::Editbox *pseudo = static_cast<CEGUI::Editbox*>(winMgr.getWindow("LOGIN_LOGIN_PSEUDO_EDITBOX"));
+            if(pseudo)
+            {
+                pseudo->setSelection(0, pseudo->getText().size());
+                pseudo->activate();
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

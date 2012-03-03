@@ -24,7 +24,7 @@ class LoginScreen
 
     private:
 
-    void ConnectClicked();
+    bool on_EventCharacterKey(CEGUI::EventArgs const &args);
 };
 
 #endif

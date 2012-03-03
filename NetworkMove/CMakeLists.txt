@@ -10,3 +10,4 @@ endif()
 
 add_executable(client ${source_files})
 target_link_libraries(client sfml-network sfml-graphics sfml-audio sfml-window sfml-system sfgui util CEGUIBase CEGUIOpenGLRenderer)
+install(TARGETS client DESTINATION ${INSTALL_PATH})
