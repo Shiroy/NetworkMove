@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <memory>
 #include <iostream>
 
-App::App() : m_mainSocket(this)
+App::App() : m_mainSocket(this), m_login(this)
 {
     //ctor
 }
@@ -37,26 +37,11 @@ void App::Init()
 
     m_window.Create(sf::VideoMode(800, 600), "Network Move", sf::Style::Close | sf::Style::Titlebar);
     m_window.SetFramerateLimit(60);
-    //m_window.ShowMouseCursor(false);
+    m_window.ShowMouseCursor(false);
 
     sGuiManager->Initialize(&m_window);
 
     m_login.CreateGui();
-    /*sfg::Widget::Ptr result = sGuiManager->GetWidget("LOGIN_LOGIN_CONNECT_BUTTON");
-
-    sfg::Button::Ptr connect = sfg::DynamicPointerCast<sfg::Button>(result);
-    if(connect)
-    {
-        connect->OnClick.Connect(&App::ConnectHandler, this);
-    }
-
-    sfg::Button::Ptr cancel = sfg::DynamicPointerCast<sfg::Button>(sGuiManager->GetWidget("LOGIN_STATUS_CANCEL_BUTTON"));
-    if(cancel)
-    {
-        cancel->OnClick.Connect(&App::CancelClicked, this);
-    }
-
-    sGuiManager->SetTopLevelWidget("LOGIN_LOGIN_MAIN_BOX");*/
 }
 
 void App::Run()
@@ -98,21 +83,21 @@ void App::Exit()
 
 }
 
-void App::ConnectHandler()
+bool App::ConnectHandler(CEGUI::EventArgs const &e)
 {
-    /*sf::Packet data;
-
-    sfg::Entry::Ptr pseudoBox, passBox;
-    pseudoBox = sfg::DynamicPointerCast<sfg::Entry>(sGuiManager->GetWidget("LOGIN_LOGIN_PSEUDO_ENTRY"));
-    passBox = sfg::DynamicPointerCast<sfg::Entry>(sGuiManager->GetWidget("LOGIN_LOGIN_PASS_ENTRY"));
+    sf::Packet data;
 
     m_login.SetStatutMessage("Connexion en cours");
+
+    CEGUI::WindowManager &winMgr = CEGUI::WindowManager::getSingleton();
+    CEGUI::Editbox *pseudoBox = static_cast<CEGUI::Editbox*>(winMgr.getWindow("LOGIN_LOGIN_PSEUDO_EDITBOX"));
+    CEGUI::Editbox *passBox = static_cast<CEGUI::Editbox*>(winMgr.getWindow("LOGIN_LOGIN_PASSWORD_EDITBOX"));
 
     if(pseudoBox && passBox)
     {
         std::string pseudo, password;
-        pseudo = pseudoBox->GetText();
-        password = passBox->GetText();
+        pseudo = pseudoBox->getText().c_str();
+        password = passBox->getText().c_str();;
         data << uint16(CMSG_AUTH_TRY);
         data << std::string("0.0.1a");
         data << pseudo;
@@ -121,21 +106,18 @@ void App::ConnectHandler()
         if(!m_mainSocket.ConnectTo(sf::IpAddress("127.0.0.1")))
         {
             m_login.SetStatutMessage("Impossible de se connecter. Veuillez rééssayer plus tard.");
+            return true;
         }
 
         m_mainSocket.SendPacket(data);
-    }*/
+    }
+    return true;
 }
 
-void App::CancelClicked()
+bool App::CancelClicked(CEGUI::EventArgs const &e)
 {
-    /*sfg::Window::Ptr statusWindow = sfg::DynamicPointerCast<sfg::Window>(sGuiManager->GetWidget("LOGIN_STATUS_DIALOG_WINDOW"));
-    if(statusWindow)
-    {
-        statusWindow->Show(false);
-    }
-
-    m_mainSocket.Close();*/
+    m_login.SetStatutMessage();
+    m_mainSocket.Close();
 }
 
 void App::AuthResponseReceived(uint8 resp)

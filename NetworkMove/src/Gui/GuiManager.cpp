@@ -45,6 +45,7 @@ bool GuiManager::Initialize(sf::RenderWindow *window)
         sLogMgr->Debug("Scheme chargé");
         CEGUI::FontManager::getSingleton().create("DejaVuSans-10.font");
         sLogMgr->Debug("Font chargé");
+        CEGUI::System::getSingleton().setDefaultMouseCursor("WindowsLook", "MouseArrow");
     }
     catch(CEGUI::Exception &e)
     {

@@ -23,10 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 #include <SFML/Graphics.hpp>
 #include "Util/SharedDefine.h"
-#include <Unit/Unit.h>
-#include <Network/WorldSocket.h>
-#include <Gui/GuiManager.h>
-#include <Gui/LoginScreen.h>
+#include "Unit/Unit.h"
+#include "Network/WorldSocket.h"
+#include "Gui/GuiManager.h"
+#include "Gui/LoginScreen.h"
 
 class App
 {
@@ -45,9 +45,8 @@ class App
     *Gestion des signaux de la GUI*
     ******************************/
 
-    void ConnectHandler();
-    void CancelClicked();
-
+    bool ConnectHandler(CEGUI::EventArgs const &e);
+    bool CancelClicked(CEGUI::EventArgs const &e);
     /********************************
     *Gestion des messages du serveur*
     ********************************/

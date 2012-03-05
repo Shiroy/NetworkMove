@@ -20,19 +20,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LOGIN_SCREEN_H
 
 #include <string>
-#include <SFGUI/Entry.hpp>
-#include <SFGUI/Button.hpp>
-#include <SFGUI/Box.hpp>
-#include <SFGUI/Window.hpp>
-#include <SFGUI/Label.hpp>
-#include <Gui/GuiManager.h>
+#include "Gui/GuiManager.h"
 
+class App;
 
 class LoginScreen
 {
     public:
 
-    LoginScreen();
+    /*!
+     *\brief Constructeur
+     *\param *app Pointeur ver l'instance de App pour la gestion des événements
+     */
+    LoginScreen(App *app);
     ~LoginScreen();
 
     /*!
@@ -50,6 +50,7 @@ class LoginScreen
     private:
 
     bool on_EventCharacterKey(CEGUI::EventArgs const &args);
+    App *m_app; //Pointeur sur l'instance de app
 };
 
 #endif
