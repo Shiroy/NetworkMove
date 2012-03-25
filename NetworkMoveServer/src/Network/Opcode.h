@@ -88,6 +88,10 @@ enum Opcode
     *\par Structure
     *- \c uint8 \c erreur ; Code d'erreur (0 si aucune erreur)
     */
+    CMSG_CHAR_ENUM = 0x0003,/*!< Opcode envoyé par le client pour demander la liste des personnages au serveur
+    *\par Structure
+    *Opcode envoyé seul
+    */
     MSG_LAST_OPCODE,
 };
 

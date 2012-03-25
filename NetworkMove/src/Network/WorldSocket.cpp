@@ -43,13 +43,14 @@ WorldSocket::WorldSocket(App *appInstance) : m_appInstance(appInstance)
 
     REGISTER_OPCODE(CMSG_AUTH_TRY, STATUT_NEVER, &WorldSocket::NullHandler);
     REGISTER_OPCODE(SMSG_AUTH_TRY, STATUT_LOGIN_SCREEN, &WorldSocket::HandleAuthResponse);
+    REGISTER_OPCODE(CMSG_CHAR_ENUM, STATUT_NEVER, &WorldSocket::NullHandler);
 }
 
 WorldSocket::~WorldSocket()
 {
     if(m_thread)
     {
-        m_thread->Terminate();
+        m_thread->terminate();
         delete m_thread;
         m_thread = NULL;
     }
@@ -59,72 +60,76 @@ void WorldSocket::Update(uint32 uiDiff)
 {
     sf::Packet data;
 
-    m_sendMutex.Lock();
     if(!m_sendQueuePacket.empty())
     {
+        m_sendMutex.lock();
         data = m_sendQueuePacket.front();
-        m_sendQueuePacket.pop();
-    }
-    m_sendMutex.Unlock();
 
-    if(data.GetDataSize() != 0)
-    {
-        m_socket.Send(data);
+        if(data.getDataSize() != 0)
+        {
+            m_socket.send(data);
+        }
+
+        m_sendQueuePacket.pop();
+        m_sendMutex.unlock();
     }
 
     //Traite les packet entrant
 
-    data.Clear();
+    data.clear();
 
-    m_receiveMutex.Lock();
     if(m_queuedPacket.size() != 0)
     {
+        m_receiveMutex.lock();
         data = m_queuedPacket.front();
-        m_queuedPacket.pop();
-    }
-    m_receiveMutex.Unlock();
 
-    if(data.GetDataSize() != 0)
-    {
-        uint16 opcode;
-        data >> opcode;
-
-        OpcodeHandler opHandler = opcodeMap[opcode];
-
-        if(opHandler.status != m_statut)
+        if(data.getDataSize() != 0)
         {
-            sLogMgr->Message("Réception d'un opcode invalide");
-            return;
+            uint16 opcode;
+            data >> opcode;
+
+            OpcodeHandler opHandler = opcodeMap[opcode];
+
+            if(opHandler.status != m_statut)
+            {
+                sLogMgr->Message("Réception d'un opcode invalide");
+                return;
+            }
+
+            (this->*opHandler.handler)(data);
         }
 
-        (this->*opHandler.handler)(data);
-    }
+        m_queuedPacket.pop();
+        m_receiveMutex.unlock();
+    }    
+
+
 }
 
 bool WorldSocket::ConnectTo(sf::IpAddress host, uint16 port)
 {
     if(m_thread)
     {
-        m_thread->Terminate();
+        m_thread->terminate();
         delete m_thread;
         m_thread = NULL;
     }
 
     m_thread = new sf::Thread(&WorldSocket::NetworkThread, this);
     assert(m_thread);
-    m_thread->Launch();
+    m_thread->launch();
 
     if(host != sf::IpAddress::None)
         SetServerAddress(host);
 
-    return (m_socket.Connect(m_serverAddress, port) == sf::Socket::Done) ? true : false;
+    return (m_socket.connect(m_serverAddress, port) == sf::Socket::Done) ? true : false;
 }
 
 void WorldSocket::SendPacket(sf::Packet &data)
 {
-    m_sendMutex.Lock();
+    m_sendMutex.lock();
     m_sendQueuePacket.push(data);
-    m_sendMutex.Unlock();
+    m_sendMutex.unlock();
 }
 
 void WorldSocket::NetworkThread()
@@ -133,7 +138,7 @@ void WorldSocket::NetworkThread()
 
     //std::cout << "Thread reseau" << std::endl;
 
-    if(m_socket.Receive(data) == sf::Socket::Disconnected)
+    if(m_socket.receive(data) == sf::Socket::Disconnected)
     {
         //Gerer la deconnexion (ex : Crash serveur)
         while(m_sendQueuePacket.size() != 0) //On purge la liste d'attente d'envoie
@@ -144,19 +149,19 @@ void WorldSocket::NetworkThread()
     }
     else
     {
-        m_receiveMutex.Lock();
+        m_receiveMutex.lock();
         m_queuedPacket.push(data);
-        m_receiveMutex.Unlock();
+        m_receiveMutex.unlock();
         sLogMgr->Message("Reponse du serveur !");
     }
 }
 
 void WorldSocket::Close()
 {
-    m_socket.Disconnect();
+    m_socket.disconnect();
     if(m_thread)
     {
-        m_thread->Terminate();
+        m_thread->terminate();
         delete m_thread;
         m_thread = NULL;
     }

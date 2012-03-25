@@ -29,20 +29,20 @@ WorldSession::WorldSession(sf::TcpSocket *socket)
     m_toDestroy = false;
     m_thread = new sf::Thread(&WorldSession::NetworkThread, this);
     assert(m_thread);
-    m_thread->Launch();
+    m_thread->launch();
 }
 
 WorldSession::~WorldSession()
 {
     if(m_socket)
     {
-        m_socket->Disconnect();
+        m_socket->disconnect();
         delete m_socket;
     }
 
     if(m_thread)
     {
-        m_thread->Terminate();
+        m_thread->terminate();
         delete m_thread;
         m_thread = NULL;
     }
@@ -52,15 +52,15 @@ void WorldSession::Update(const uint32 uiDiff)
 {
     sf::Packet data;
 
-    m_recvMutex.Lock();
+    m_recvMutex.lock();
     if(!m_queuedPacket.empty())
     {
         data = m_queuedPacket.front();
         m_queuedPacket.pop();
     }
-    m_recvMutex.Unlock();
+    m_recvMutex.unlock();
 
-    if(data.GetDataSize() != 0)
+    if(data.getDataSize() != 0)
     {
         uint16 opcode;
         data >> opcode;
@@ -74,22 +74,22 @@ void WorldSession::Update(const uint32 uiDiff)
         else
         {
             sLogMgr->Message("Reception d'un opcode invalide à cette phase de jeu : 0x%X (%s). Kick !", op.opcode, op.opcodeName);
-            m_socket->Disconnect();
+            m_socket->disconnect();
         }
     }
 
-    m_sendMutex.Lock();
+    m_sendMutex.lock();
     if(!m_sendQueuePacket.empty())
     {
         data = m_sendQueuePacket.front();
         m_sendQueuePacket.pop();
     }
-    m_sendMutex.Unlock();
+    m_sendMutex.unlock();
 
-    if(data.GetDataSize() != 0)
+    if(data.getDataSize() != 0)
     {
         sLogMgr->Debug("Envoie de donné");
-        m_socket->Send(data);
+        m_socket->send(data);
     }
 }
 
@@ -105,9 +105,9 @@ uint8 WorldSession::GetStatus()
 
 void WorldSession::SendPacket(sf::Packet &pkt)
 {
-    m_sendMutex.Lock();
+    m_sendMutex.lock();
     m_sendQueuePacket.push(pkt);
-    m_sendMutex.Unlock();
+    m_sendMutex.unlock();
 }
 
 void WorldSession::HandleAuthTry(sf::Packet &data)
@@ -123,6 +123,7 @@ void WorldSession::HandleAuthTry(sf::Packet &data)
     sf::Packet resp;
     resp << uint16(SMSG_AUTH_TRY);
     resp << uint8(0); //Code d'erreur
+    SetStatus(STATUS_CHARACTER_SELECTION);
     SendPacket(resp);
 }
 
@@ -131,10 +132,10 @@ void WorldSession::NetworkThread()
     while(1)
     {
         sf::Packet data;
-        if(m_socket->Receive(data) == sf::Socket::Disconnected)
+        if(m_socket->receive(data) == sf::Socket::Disconnected)
         {
             //Deconnexion d'un client
-            sLogMgr->Message("Deconnexion de %s", m_socket->GetRemoteAddress().ToString().c_str());
+            sLogMgr->Message("Deconnexion de %s", m_socket->getRemoteAddress().toString().c_str());
             m_toDestroy = true;
             return;
         }
@@ -142,9 +143,9 @@ void WorldSession::NetworkThread()
         {
             //Reception de donnés
             sLogMgr->Debug("Reception de donné");
-            m_recvMutex.Lock();
+            m_recvMutex.lock();
             m_queuedPacket.push(data);
-            m_recvMutex.Unlock();
+            m_recvMutex.unlock();
         }
     }
 }

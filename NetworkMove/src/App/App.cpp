@@ -35,9 +35,9 @@ void App::Init()
 {
     run = true;
 
-    m_window.Create(sf::VideoMode(800, 600), "Network Move", sf::Style::Close | sf::Style::Titlebar);
-    m_window.SetFramerateLimit(60);
-    m_window.ShowMouseCursor(false);
+    m_window.create(sf::VideoMode(800, 600), "Network Move", sf::Style::Close | sf::Style::Titlebar);
+    m_window.setFramerateLimit(60);
+    m_window.setMouseCursorVisible(false);
 
     sGuiManager->Initialize(&m_window);
 
@@ -48,28 +48,28 @@ void App::Run()
 {
     while(run)
     {
-        uint32 uiDiff = m_clock.GetElapsedTime().AsMilliseconds();
+        uint32 uiDiff = m_clock.getElapsedTime().asMilliseconds();
         m_mainSocket.Update(uiDiff);
         Update(uiDiff);
-        m_clock.Restart();
+        m_clock.restart();
 
         sf::Event event;
-        while(m_window.PollEvent(event))
+        while(m_window.pollEvent(event))
         {
-            if(event.Type == sf::Event::Closed)
+            if(event.type == sf::Event::Closed)
             {
-                m_window.Close();
+                m_window.close();
                 run = false;
             }
 
             sGuiManager->HandleGuiEvent(event);
         }
 
-        m_window.Clear();
+        m_window.clear();
 
         sGuiManager->RenderGui();
 
-        m_window.Display();
+        m_window.display();
     }
 }
 
@@ -126,6 +126,8 @@ void App::AuthResponseReceived(uint8 resp)
     {
         case AUTH_OK:
         m_login.SetStatutMessage("Authentifié.");
+        m_mainSocket.SendCharacterEnum();
+        m_login.SetStatutMessage("Chargement des personnages");
         break;
 
         case AUTH_WRONG_PASSWORD:

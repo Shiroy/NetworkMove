@@ -35,23 +35,23 @@ WorldSocketMgr::~WorldSocketMgr()
 
 void WorldSocketMgr::StartNetwork()
 {
-    if(listener.Listen(3241) != sf::Socket::Done)
+    if(listener.listen(3241) != sf::Socket::Done)
         exit(1);
-    listener.SetBlocking(false);
+    listener.setBlocking(false);
     sLogMgr->Print("Le serveur a été démarré correctement");
 }
 
 void WorldSocketMgr::StopNetwork()
 {
-    listener.Close();
+    listener.close();
 }
 
 void WorldSocketMgr::Update(uint32 uiDiff)
 {
     sf::TcpSocket *nSocket = new sf::TcpSocket;
-    if(listener.Accept(*nSocket) == sf::Socket::Done) //Gestion des nouvelle connection
+    if(listener.accept(*nSocket) == sf::Socket::Done) //Gestion des nouvelle connection
     {
-        sLogMgr->Message("Nouvelle connection de %s", nSocket->GetRemoteAddress().ToString().c_str());
+        sLogMgr->Message("Nouvelle connection de %s", nSocket->getRemoteAddress().toString().c_str());
         IncommingConnection(nSocket);
     }
     else

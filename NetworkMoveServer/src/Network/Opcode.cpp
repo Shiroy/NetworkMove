@@ -37,6 +37,7 @@ void InitOpcodeTable()
     REGISTER_OPCODE(MSG_NULL, STATUS_AUTHENTIFICATION, &WorldSession::NullHandler);
     REGISTER_OPCODE(CMSG_AUTH_TRY, STATUS_AUTHENTIFICATION, &WorldSession::HandleAuthTry);
     REGISTER_OPCODE(SMSG_AUTH_TRY, STATUS_NEVER, &WorldSession::NullHandler);
+    REGISTER_OPCODE(CMSG_CHAR_ENUM, STATUS_CHARACTER_SELECTION, &WorldSession::HandleCharEnum);
 }
 
 const char *LookupOpcodeName(uint16 opcode)

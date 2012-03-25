@@ -26,7 +26,7 @@ World::World()
 void World::InitWorld()
 {
     m_run = true;
-    m_clock.Restart();
+    m_clock.restart();
     sWorldSocketMgr->StartNetwork();
 }
 
@@ -34,12 +34,12 @@ void World::Run()
 {
     while(m_run)
     {
-        uint32 uiDiff = m_clock.GetElapsedTime().AsMilliseconds();
+        uint32 uiDiff = m_clock.getElapsedTime().asMilliseconds();
         if(uiDiff < 32) //Au moin 32 miliseconde d'inactivité pour economiser les mprocesseur (changé la valeur si besoin est)
         {
             usleep(32-uiDiff);
         }
-        m_clock.Restart();
+        m_clock.restart();
 
         sWorldSocketMgr->Update(uiDiff);
     }

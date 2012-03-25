@@ -66,30 +66,30 @@ void GuiManager::RenderGui()
 void GuiManager::HandleGuiEvent(sf::Event &event)
 {
     bool handled = false;
-    switch(event.Type)
+    switch(event.type)
     {
         case sf::Event::TextEntered:
-        handled = CEGUI::System::getSingleton().injectChar(event.Text.Unicode);
+        handled = CEGUI::System::getSingleton().injectChar(event.text.unicode);
         break;
 
         case sf::Event::KeyPressed:
-        handled = CEGUI::System::getSingleton().injectKeyDown(ConvertKeyCode(event.Key.Code));
+        handled = CEGUI::System::getSingleton().injectKeyDown(ConvertKeyCode(event.key.code));
         break;
 
         case sf::Event::KeyReleased:
-        handled = CEGUI::System::getSingleton().injectKeyUp(ConvertKeyCode(event.Key.Code));
+        handled = CEGUI::System::getSingleton().injectKeyUp(ConvertKeyCode(event.key.code));
         break;
 
         case sf::Event::MouseMoved:
-        handled = CEGUI::System::getSingleton().injectMousePosition(event.MouseMove.X, event.MouseMove.Y);
+        handled = CEGUI::System::getSingleton().injectMousePosition(event.mouseMove.x, event.mouseMove.y);
         break;
 
         case sf::Event::MouseButtonPressed:
-        handled = CEGUI::System::getSingleton().injectMouseButtonDown(ConvertMouseButton(event.MouseButton.Button));
+        handled = CEGUI::System::getSingleton().injectMouseButtonDown(ConvertMouseButton(event.mouseButton.button));
         break;
 
         case sf::Event::MouseButtonReleased:
-        handled = CEGUI::System::getSingleton().injectMouseButtonUp(CEGUI::MouseButton(event.MouseButton.Button));
+        handled = CEGUI::System::getSingleton().injectMouseButtonUp(CEGUI::MouseButton(event.mouseButton.button));
         break;
     }
 }

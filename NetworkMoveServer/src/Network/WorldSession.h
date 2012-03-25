@@ -49,6 +49,10 @@ class WorldSession
     void NullHandler(sf::Packet &recv){}
     void HandleAuthTry(sf::Packet &data);
 
+    //Selection des personnages
+
+    void HandleCharEnum(sf::Packet &recv);
+
     protected:
 
     private:

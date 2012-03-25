@@ -127,6 +127,11 @@ class WorldSocket
     void NullHandler(sf::Packet &) {}
     void HandleAuthResponse(sf::Packet &);
 
+    /*!
+     *\brief Envoi le paquet pour demander la liste des personnages du compte
+     */
+    void SendCharacterEnum();
+
     private:
 
     void NetworkThread(); //Gère la reception de données par la socket (l'envoir est géré dans WorldSocket::Update)
